@@ -32,6 +32,7 @@ int main()
 	G.discard[1][0] = estate;
 	G.deck[1][0] = estate;
 
+	printf("------------Testing scoreFor() function-------------\n");
 	printf("Testing - hand: curse, discard: curse, deck: curse\n");
 	result = scoreFor(0, &G);
 	printf("Expected score: -3, actual score: %d - ", result);
@@ -111,6 +112,7 @@ int main()
 	else{
 		printf("Test failed!\n\n");
 	}
+	return 0;
 }
 
 	

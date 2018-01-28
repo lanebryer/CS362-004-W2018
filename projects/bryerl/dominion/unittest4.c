@@ -22,6 +22,7 @@ int main()
 	G.supplyCount[duchy] = 0;
 	G.supplyCount[curse] = 7;
 	
+	printf("-----------Testing supplyCount() function------------\n");
 	result = supplyCount(gold, &G);
 	printf("Testing supply count of gold...\n");
 	printf("Expected value: 2, Actual value: %d - ", result);
@@ -65,5 +66,5 @@ int main()
 	else{
 		printf("Test failed!\n\n");
 	}
-	
+	return 0;	
 }

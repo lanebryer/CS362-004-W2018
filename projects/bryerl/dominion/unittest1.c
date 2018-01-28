@@ -17,7 +17,7 @@ int main()
 {
 	int result;
 	
-	printf("Testing getCost() function\n\n");
+	printf("------------Testing getCost() function--------------\n\n");
 	result = getCostTest(-1);
 	printf("Testing out of bounds value: Expected result: -1, Actual result: %d - ", result);
 	if (result == -1)
@@ -297,6 +297,7 @@ int main()
 	else{
 		printf("Test failed!\n");
 	}
+	return 0;
 }
 	
 	

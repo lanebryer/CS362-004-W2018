@@ -16,7 +16,7 @@ int main()
     struct gameState G;
 
 	initializeGame(numPlayer, k, seed, &G);
-	
+	printf("-------------Testing updateCoin() function--------------\n");
 	printf("Test update coins with: copper, copper, copper, copper, copper\n");
 	G.hand[0][0] = copper;
 	G.hand[0][1] = copper;
@@ -102,7 +102,7 @@ int main()
 	{
 		printf("Test failed!\n");
 	}
-	
+	return 0;
 }
 	
 	
