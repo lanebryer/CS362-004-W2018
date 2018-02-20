@@ -1,0 +1,80 @@
+The first bug that was found occurred in the callSmithy() function that begins on line 705.  On line 708, the for loop 
+only executes twice - when i == 0 and when i == 1.  This causes the loop to only draw 2 cards.  However, the specification for
+the smithy card is that it should draw 3 cards, not 2.  Therefore every time the smithy card is played it is drawing 1 less card
+than it should.  This was detected by my smithy card unit test.  The buggy code block is as follows:
+
+ for (i = 0; i < 2; i++) {
+        drawCard(currentPlayer, state);
+    }
+	
+The correct code should be: 
+
+ for (i = 0; i < 3; i++) {
+        drawCard(currentPlayer, state);
+    }
+	
+The code from the unit test that detected this bug is as follows:
+
+	printf("--------Testing smithy card----------\n");
+	cardEffect(smithy, choice1, choice2, choice3, &testState, handPos, &bonus);
+	result = testState.handCount[0] - G.handCount[0];
+	printf("Checking for 3 cards drawn and 1 discarded...\n");
+	printf("Net card gain expected: 2, Actual card gain: %d - ", result);
+	if(result == 2)
+	{
+		printf("Test passed!\n\n");
+	}
+	else
+	{
+		printf("Test failed!\n\n");
+	}
+	
+The second bug that was found occurred in the callAdventurer() function that begins on line 681.  This bug was found manually as my adventurer
+card unit test did not detect it.  I modified my unit test to be more thorough and it began picking up the bug.  The issue is that on line 689,
+the code checks if the card is a copper or silver card and increments the drawnTreasure counter if it is.  However, there is a third treasure card
+that is not being checked for - the gold card.  Therefore, if there is a gold card in the deck or discard pile, it will not be counted as a treasure
+and the drawnTreasure counter will not increment.  The code in question is shown below:
+
+
+        if (cardDrawn == copper || cardDrawn == silver)
+            drawntreasure++;
+        else{
+            temphand[z]=cardDrawn;
+            state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+            z++;
+        }    
+	
+The correct code would be as follows:
+
+        if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+            drawntreasure++;
+        else{
+            temphand[z]=cardDrawn;
+            state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+            z++;
+        }
+    
+This was picked up by my modified unit test in the following test code:
+
+	testState.discard[0][0] = gold;
+	testState.discard[0][1] = smithy;
+	testState.discardCount[0] = 2;
+	testState.deckCount[0] = 2;
+	testState.deck[0][0] = smithy;
+	testState.deck [0][1] = adventurer;
+
+    cardEffect(adventurer, choice1, choice2, choice3, &testState, handPos, &bonus);
+	printf("Testing with no treasures in deck, 1 gold in discard pile...\n");
+	result = testState.handCount[0] - G.handCount[0];
+	printf("Expected drawn treasures: 1, Actual result: %d - ", result);
+	if (result == 1)
+	{
+		printf("Test passed!\n\n");
+	}
+	else
+	{
+		printf("Test failed!\n\n");
+	}
+	
+By testing a scenario with a gold card in the discard pile, we can see that the expected drawn treasures should be 1, but the test returns 0
+because the gold card is not being checked for in the callAdventurer() function.
