@@ -650,11 +650,11 @@ void smithyEffect(int currentPlayer, struct gameState *state, int handPos)
 	  int i;
       for (i = 0; i < 2; i++)
 	{
-	  drawCard(currentPlayer, state);
+	  drawCard(currentPlayer, &state);
 	}
 			
       //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      discardCard(handPos, currentPlayer, &state, 0);
 }
 void adventurerEffect(int *drawntreasure, struct gameState *state, int currentPlayer, int *cardDrawn, int temphand[], int z)
 {
